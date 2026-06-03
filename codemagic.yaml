@@ -1,0 +1,27 @@
+workflows:
+  ios-debug:
+    name: iOS Debug Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Generate code
+        script: dart run build_runner build --delete-conflicting-outputs
+      - name: Build iOS (no signing)
+        script: |
+          flutter build ios --debug --no-codesign
+    artifacts:
+      - build/ios/iphonesimulator/**/*.app
+      - build/ios/iphoneos/**/*.app
+    publishing:
+      email:
+        recipients:
+          - nahidhasanraj1736@gmail.com
+        notify:
+          success: true
+          failure: true
